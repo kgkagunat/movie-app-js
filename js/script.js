@@ -11,6 +11,8 @@ async function fetchAPIData(endpoint) {
         const API_KEY = 'bcc56ec49f59a3055407bcfa8f1a49f1';
         const API_URL = `https://api.themoviedb.org/3/`;
 
+        showSpinner();
+
         // API response from determined endpoint
         const response = await fetch(
             `${API_URL}${endpoint}?api_key=${API_KEY}&language=en-us`
@@ -19,6 +21,7 @@ async function fetchAPIData(endpoint) {
         // Returns JSON object
         const data = await response.json();
         // console.log(data);
+        hideSpinner();
         return data;
     } catch (error) {
         console.log(error);
@@ -44,6 +47,16 @@ async function displayPopularMovies() {
     } catch (error) {
         console.log(error);
     }
+}
+
+// Show Spinner
+function showSpinner() {
+    document.querySelector('.spinner').classList.add('show');
+}
+
+// Hide Spinner
+function hideSpinner() {
+    document.querySelector('.spinner').classList.remove('show');
 }
 
 // Manage NAV links - add active class to nav links
