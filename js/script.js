@@ -2,7 +2,17 @@
 const globalWindow = {
     currentPage: window.location.pathname,
 };
-console.log(globalWindow.currentPage);
+// console.log(globalWindow.currentPage);
+
+// Manage NAV links - add active class to nav links
+function manageNavLinks() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach((navLink) => {
+        if (navLink.getAttribute('href') === globalWindow.currentPage) {
+            navLink.classList.add('active');
+        }
+    });
+}
 
 // Init
 function init() {
@@ -39,6 +49,9 @@ function init() {
             );
             break;
     }
+
+    // Manage NAV links call
+    manageNavLinks();
 }
 
 document.addEventListener('DOMContentLoaded', init);
