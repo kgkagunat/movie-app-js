@@ -16,6 +16,7 @@ async function fetchAPIData(endpoint) {
             `${API_URL}${endpoint}?api_key=${API_KEY}&language=en-us`
         );
 
+        // Returns JSON object
         const data = await response.json();
         // console.log(data);
         return data;
