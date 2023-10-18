@@ -4,6 +4,33 @@ const globalWindow = {
 };
 // console.log(globalWindow.currentPage);
 
+// Fetch all data from TMDB API
+async function fetchAPIData(endpoint) {
+    try {
+        const API_KEY = 'bcc56ec49f59a3055407bcfa8f1a49f1';
+        const API_URL = `https://api.themoviedb.org/3/`;
+
+        const response = await fetch(
+            `${API_URL}${endpoint}?api_key=${API_KEY}&language=en-us`
+        );
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Display popular movies
+async function displayPopularMovies() {
+    try {
+        const movieResults = await fetchAPIData('movie/popular');
+        console.log(movieResults);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // Manage NAV links - add active class to nav links
 function manageNavLinks() {
     const navLinks = document.querySelectorAll('.nav-link');
@@ -23,6 +50,7 @@ function init() {
             console.log(
                 `Current Page: ${globalWindow.currentPage} (Home Page)`
             );
+            displayPopularMovies();
             break;
         // TV Shows Page
         case '/shows.html':
