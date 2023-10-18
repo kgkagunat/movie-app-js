@@ -9,6 +9,7 @@ function init() {
     switch (globalWindow.currentPage) {
         // Home Page
         case '/':
+        case '/index.html':
             console.log(
                 `Current Page: ${globalWindow.currentPage} (Home Page)`
             );
