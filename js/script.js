@@ -129,7 +129,7 @@ function buildMovieElements(movie) {
     cardTextEl.classList.add('card-text');
     const smallTextEl = document.createElement('small');
     smallTextEl.classList.add('text-muted');
-    smallTextEl.textContent = movie.release_date;
+    smallTextEl.textContent = `Release date: ${movie.release_date}`;
 
     /* ------------------------- */
 
