@@ -37,7 +37,7 @@ async function displayPopularMovies() {
 
         // Loop through movie results
         movieResults.forEach((movie) => {
-            console.log(movie);
+            // console.log(movie);
             buildMovieElements(movie);
         });
     } catch (error) {
@@ -96,8 +96,6 @@ function init() {
     manageNavLinks();
 }
 
-document.addEventListener('DOMContentLoaded', init);
-
 // Build movie elements
 function buildMovieElements(movie) {
     // Create Card element
@@ -152,3 +150,5 @@ function buildMovieElements(movie) {
     const popularMovieParentEl = document.querySelector('#popular-movies');
     popularMovieParentEl.appendChild(cardEl);
 }
+
+document.addEventListener('DOMContentLoaded', init);
