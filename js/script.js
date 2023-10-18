@@ -110,8 +110,15 @@ function buildMovieElements(movie) {
     // Img element
     const imgEl = document.createElement('img');
     imgEl.classList.add('card-img-top');
-    imgEl.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-    imgEl.alt = movie.title;
+
+    if (movie.poster_path) {
+        imgEl.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+        imgEl.alt = movie.title;
+    } else {
+        imgEl.src =
+            'https://via.placeholder.com/500x750.png?text=Image+Not+Available';
+        imgEl.alt = 'Image Not Available';
+    }
 
     /* ------------------------- */
 
