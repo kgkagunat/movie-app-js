@@ -17,6 +17,7 @@ async function fetchAPIData(endpoint) {
         );
 
         const data = await response.json();
+        // console.log(data);
         return data;
     } catch (error) {
         console.log(error);
@@ -27,8 +28,18 @@ async function fetchAPIData(endpoint) {
 async function displayPopularMovies() {
     try {
         // Fetch popular movies - passing in specified endpoint
-        const movieResults = await fetchAPIData('movie/popular');
-        console.log(movieResults);
+        const data = await fetchAPIData('movie/popular');
+        // console.log(data);
+
+        // Set movie results to data.results property array
+        const movieResults = data.results;
+        // console.log(movieResults);
+
+        // Loop through movie results
+        movieResults.forEach((movie) => {
+            console.log(movie);
+            buildMovieElements(movie);
+        });
     } catch (error) {
         console.log(error);
     }
@@ -86,3 +97,58 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Build movie elements
+function buildMovieElements(movie) {
+    // Create Card element
+    const cardEl = document.createElement('div');
+    cardEl.classList.add('card');
+
+    // Create link element -- append img element to link element
+    const linkEl = document.createElement('a');
+    linkEl.href = `movie-details.html?id=${movie.id}`;
+
+    // Img element
+    const imgEl = document.createElement('img');
+    imgEl.classList.add('card-img-top');
+    imgEl.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    imgEl.alt = movie.title;
+
+    /* ------------------------- */
+
+    // Create card-body element -- append title element and text element to card-body element
+    const cardBodyEl = document.createElement('div');
+    cardBodyEl.classList.add('card-body');
+
+    // Create title element
+    const cardTitleEl = document.createElement('h5');
+    cardTitleEl.classList.add('card-title');
+    cardTitleEl.textContent = movie.title;
+
+    // Create text element -- append small element to card-text element
+    const cardTextEl = document.createElement('p');
+    cardTextEl.classList.add('card-text');
+    const smallTextEl = document.createElement('small');
+    smallTextEl.classList.add('text-muted');
+    smallTextEl.textContent = movie.release_date;
+
+    /* ------------------------- */
+
+    // Append small element to text element
+    cardTextEl.appendChild(smallTextEl);
+
+    // Append title and text element to card-body element
+    cardBodyEl.appendChild(cardTitleEl);
+    cardBodyEl.appendChild(cardTextEl);
+
+    // Append img element to link element
+    linkEl.appendChild(imgEl);
+
+    // Append link element and card-body element to card element
+    cardEl.appendChild(linkEl);
+    cardEl.appendChild(cardBodyEl);
+
+    // Append card element to popular-movies element
+    const popularMovieParentEl = document.querySelector('#popular-movies');
+    popularMovieParentEl.appendChild(cardEl);
+}
