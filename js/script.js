@@ -7,9 +7,11 @@ const globalWindow = {
 // Fetch all data from TMDB API
 async function fetchAPIData(endpoint) {
     try {
+        // API Key and URL
         const API_KEY = 'bcc56ec49f59a3055407bcfa8f1a49f1';
         const API_URL = `https://api.themoviedb.org/3/`;
 
+        // API response from determined endpoint
         const response = await fetch(
             `${API_URL}${endpoint}?api_key=${API_KEY}&language=en-us`
         );
@@ -24,6 +26,7 @@ async function fetchAPIData(endpoint) {
 // Display popular movies
 async function displayPopularMovies() {
     try {
+        // Fetch popular movies - passing in specified endpoint
         const movieResults = await fetchAPIData('movie/popular');
         console.log(movieResults);
     } catch (error) {
