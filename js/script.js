@@ -217,6 +217,9 @@ function buildMovieElements(movie) {
 function buildMovieDetailsElements(movie) {
     const div = document.createElement('div');
 
+    // Overlay the background image
+    displayBackgroundImage('movie', movie.backdrop_path);
+
     div.innerHTML = `
     <div class="details-top">
           <div>
@@ -338,9 +341,31 @@ function buildTVShowElements(show) {
     popularTVShowParentEl.appendChild(cardEl);
 }
 
-document.addEventListener('DOMContentLoaded', init);
-
 // Add commas to numbers
 function addCommasToNumbers(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+// Display backdrop image movie/TV show
+function displayBackgroundImage(type, backdropPath) {
+    const backdropEl = document.createElement('div');
+    backdropEl.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${backdropPath})`;
+    backdropEl.style.backgroundSize = 'cover';
+    backdropEl.style.backgroundPosition = 'center';
+    backdropEl.style.backgroundRepeat = 'no-repeat';
+    backdropEl.style.height = '100vh';
+    backdropEl.style.width = '100vw';
+    backdropEl.style.position = 'absolute';
+    backdropEl.style.top = '0';
+    backdropEl.style.left = '0';
+    backdropEl.style.zIndex = '-1';
+    backdropEl.style.opacity = '0.1';
+
+    if (type === 'movie') {
+        document.querySelector('#movie-details').appendChild(backdropEl);
+    } else {
+        document.querySelector('#tv-details').appendChild(backdropEl);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', init);
