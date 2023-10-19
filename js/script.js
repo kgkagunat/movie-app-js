@@ -49,6 +49,27 @@ async function displayPopularMovies() {
     }
 }
 
+// Display popular TV shows
+async function displayPopularTVShows() {
+    try {
+        // Fetch popular TV shows - passing in specified endpoint
+        const data = await fetchAPIData('tv/popular');
+        // console.log(data);
+
+        // Set TV show results to data.results property array
+        const tvShowResults = data.results;
+        // console.log(tvShowResults);
+
+        // Loop through TV show results
+        tvShowResults.forEach((show) => {
+            console.log(show);
+            buildTVShowElements(show);
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // Show Spinner
 function showSpinner() {
     document.querySelector('.spinner').classList.add('show');
@@ -85,6 +106,7 @@ function init() {
             console.log(
                 `Current Page: ${globalWindow.currentPage} (TV Shows Page)`
             );
+            displayPopularTVShows();
             break;
         // Movies Details Page
         case '/movie-details.html':
@@ -170,6 +192,68 @@ function buildMovieElements(movie) {
     // Append card element to popular-movies element
     const popularMovieParentEl = document.querySelector('#popular-movies');
     popularMovieParentEl.appendChild(cardEl);
+}
+
+// Build TV show elements
+function buildTVShowElements(show) {
+    // Create Card element
+    const cardEl = document.createElement('div');
+    cardEl.classList.add('card');
+
+    // Create link element -- append img element to link element
+    const linkEl = document.createElement('a');
+    linkEl.href = `tv-details.html?id=${show.id}`;
+
+    // Img element
+    const imgEl = document.createElement('img');
+    imgEl.classList.add('card-img-top');
+
+    if (show.poster_path) {
+        imgEl.src = `https://image.tmdb.org/t/p/w500${show.poster_path}`;
+        imgEl.alt = show.name;
+    } else {
+        imgEl.src =
+            'https://via.placeholder.com/500x750.png?text=Image+Not+Available';
+        imgEl.alt = 'Image Not Available';
+    }
+
+    /* ------------------------- */
+
+    // Create card-body element -- append title element and text element to card-body element
+    const cardBodyEl = document.createElement('div');
+    cardBodyEl.classList.add('card-body');
+
+    // Create title element
+    const cardTitleEl = document.createElement('h5');
+    cardTitleEl.classList.add('card-title');
+    cardTitleEl.textContent = show.name;
+
+    // Create text element -- append small element to card-text element
+    const cardTextEl = document.createElement('p');
+    cardTextEl.classList.add('card-text');
+    const smallTextEl = document.createElement('small');
+    smallTextEl.classList.add('text-muted');
+    smallTextEl.textContent = `Release date: ${show.first_air_date}`;
+
+    /* ------------------------- */
+
+    // Append small element to text element
+    cardTextEl.appendChild(smallTextEl);
+
+    // Append title and text element to card-body element
+    cardBodyEl.appendChild(cardTitleEl);
+    cardBodyEl.appendChild(cardTextEl);
+
+    // Append img element to link element
+    linkEl.appendChild(imgEl);
+
+    // Append link element and card-body element to card element
+    cardEl.appendChild(linkEl);
+    cardEl.appendChild(cardBodyEl);
+
+    // Append card element to popular-movies element
+    const popularTVShowParentEl = document.querySelector('#popular-shows');
+    popularTVShowParentEl.appendChild(cardEl);
 }
 
 document.addEventListener('DOMContentLoaded', init);
