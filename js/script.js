@@ -49,6 +49,24 @@ async function displayPopularMovies() {
     }
 }
 
+// Display Movie Details
+async function displayMovieDetails() {
+    try {
+        // Get movie ID (query string) from URL -- split string and get ID
+        const movieQueryString = window.location.search;
+        const movieId = movieQueryString.split('=')[1];
+        // console.log(movieId);
+
+        // Fetch movie details - passing in specified endpoint
+        const data = await fetchAPIData(`movie/${movieId}`);
+        // console.log(data);
+
+        buildMovieDetailsElements(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // Display popular TV shows
 async function displayPopularTVShows() {
     try {
@@ -62,7 +80,7 @@ async function displayPopularTVShows() {
 
         // Loop through TV show results
         tvShowResults.forEach((show) => {
-            console.log(show);
+            // console.log(show);
             buildTVShowElements(show);
         });
     } catch (error) {
@@ -113,6 +131,7 @@ function init() {
             console.log(
                 `Current Page: ${globalWindow.currentPage} (Movie Details Page)`
             );
+            displayMovieDetails();
             break;
         // TV Details Page
         case '/tv-details.html':
@@ -194,6 +213,69 @@ function buildMovieElements(movie) {
     popularMovieParentEl.appendChild(cardEl);
 }
 
+// Build movie details elements
+function buildMovieDetailsElements(movie) {
+    const div = document.createElement('div');
+
+    div.innerHTML = `
+    <div class="details-top">
+          <div>
+            <img
+              src=https://image.tmdb.org/t/p/w500${movie.poster_path}
+              class="card-img-top"
+              alt="${movie.title}"
+            />
+          </div>
+          <div>
+            <h2>${movie.title}</h2>
+            <p>
+              <i class="fas fa-star text-primary"></i>
+              ${movie.vote_average.toFixed(1)} / 10
+            </p>
+            <p class="text-muted">${movie.release_date}</p>
+            <p>
+              ${movie.overview}
+            </p>
+            <h5>Genres</h5>
+            <ul class="list-group">
+              ${movie.genres
+                  .map(
+                      (genre) =>
+                          `<li class="list-group-item">${genre.name}</li>`
+                  )
+                  .join('')}
+            </ul>
+            <a href=${
+                movie.homepage
+            } target="_blank" class="btn">Movie Homepage</a>
+          </div>
+        </div>
+        <div class="details-bottom">
+          <h2>Movie Info</h2>
+          <ul>
+            <li><span class="text-secondary">Budget:</span>$${addCommasToNumbers(
+                movie.budget
+            )}</li>
+            <li><span class="text-secondary">Revenue:</span>$${addCommasToNumbers(
+                movie.revenue
+            )}</li>
+            <li><span class="text-secondary">Runtime:</span>${
+                movie.runtime
+            } minutes</li>
+            <li><span class="text-secondary">Status:</span>${movie.status}</li>
+          </ul>
+          <h4>Production Companies</h4>
+          <div class="list-group">
+          ${movie.production_companies
+              .map((company) => `<span>${company.name},</span>`)
+              .join(' ')}
+          </div>
+        </div>
+    `;
+
+    document.querySelector('#movie-details').appendChild(div);
+}
+
 // Build TV show elements
 function buildTVShowElements(show) {
     // Create Card element
@@ -257,3 +339,8 @@ function buildTVShowElements(show) {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Add commas to numbers
+function addCommasToNumbers(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
