@@ -276,7 +276,8 @@ function buildMovieDetailsElements(movie) {
         </div>
     `;
 
-    document.querySelector('#movie-details').appendChild(div);
+    const movieDetailsParentEl = document.querySelector('#movie-details');
+    movieDetailsParentEl.appendChild(div);
 }
 
 // Build TV show elements
