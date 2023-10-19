@@ -52,12 +52,12 @@ async function displayPopularMovies() {
 // Display Movie Details
 async function displayMovieDetails() {
     try {
-        // Get movie ID (query string) from URL -- split string and get ID
+        // Get movie ID (query string) from URL -- split string and get ID only
         const movieQueryString = window.location.search;
         const movieId = movieQueryString.split('=')[1];
         // console.log(movieId);
 
-        // Fetch movie details - passing in specified endpoint
+        // Fetch movie details - passing in movie ID
         const data = await fetchAPIData(`movie/${movieId}`);
         // console.log(data);
 
