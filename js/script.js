@@ -1,8 +1,15 @@
 // Global Window Object
 const globalWindow = {
     currentPage: window.location.pathname,
+    search: {
+        term: '',
+        type: '',
+        page: 1,
+        totalPages: 1,
+    },
 };
 // console.log(globalWindow.currentPage);
+// console.log(globalWindow.search)
 
 // Fetch all data from TMDB API
 async function fetchAPIData(endpoint) {
@@ -106,26 +113,6 @@ async function displayPopularTVShowsDetails() {
     }
 }
 
-// Show Spinner
-function showSpinner() {
-    document.querySelector('.spinner').classList.add('show');
-}
-
-// Hide Spinner
-function hideSpinner() {
-    document.querySelector('.spinner').classList.remove('show');
-}
-
-// Manage NAV links - add active class to nav links
-function manageNavLinks() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach((navLink) => {
-        if (navLink.getAttribute('href') === globalWindow.currentPage) {
-            navLink.classList.add('active');
-        }
-    });
-}
-
 // Display Slider-Swiper Movies
 async function displaySliderMovies() {
     try {
@@ -154,6 +141,47 @@ async function displaySliderMovies() {
     } catch (error) {
         console.log(error);
     }
+}
+
+// Search movies & tv shows
+async function searchMain() {
+    try {
+        // Get query string from URL
+        const searchQueryString = window.location.search;
+        // console.log(searchQueryString);
+
+        // Get query string methods -- get the query string `type` and its value
+        const urlSearchParams = new URLSearchParams(searchQueryString);
+        // console.log(urlSearchParams.get('type'));
+
+        // Set url search term and type to globalWindow object properties
+        globalWindow.search.type = urlSearchParams.get('type');
+        globalWindow.search.term = urlSearchParams.get('term');
+
+        if (
+            globalWindow.search.term !== '' &&
+            globalWindow.search.term !== null
+        ) {
+            const data = await searchAPIData();
+            console.log(data);
+        } else {
+            showAlert('Please enter a search term');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Custom show alert
+function showAlert(message, className) {
+    const alertEl = document.createElement('div');
+    alertEl.classList.add('alert', className);
+    alertEl.appendChild(document.createTextNode(message));
+    document.querySelector('#alert').appendChild(alertEl);
+
+    setTimeout(() => {
+        alertEl.remove();
+    }, 3000);
 }
 
 // Init
@@ -194,11 +222,32 @@ function init() {
             console.log(
                 `Current Page: ${globalWindow.currentPage} (Search Page)`
             );
+            searchMain();
             break;
     }
 
     // Manage NAV links call
     manageNavLinks();
+}
+
+// Show Spinner
+function showSpinner() {
+    document.querySelector('.spinner').classList.add('show');
+}
+
+// Hide Spinner
+function hideSpinner() {
+    document.querySelector('.spinner').classList.remove('show');
+}
+
+// Manage NAV links - add active class to nav links
+function manageNavLinks() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach((navLink) => {
+        if (navLink.getAttribute('href') === globalWindow.currentPage) {
+            navLink.classList.add('active');
+        }
+    });
 }
 
 // Build movie elements
