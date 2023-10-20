@@ -190,8 +190,17 @@ async function searchMain() {
             globalWindow.search.term !== '' &&
             globalWindow.search.term !== null
         ) {
-            const data = await searchAPIData();
-            console.log(data);
+            const { results, total_pages, page } = await searchAPIData();
+            // console.log(results, total_pages, page);
+
+            if (results.length === 0) {
+                showAlert('No results found');
+                return;
+            }
+
+            displaysSearchResults(results);
+
+            document.querySelector('#search-term').value = '';
         } else {
             showAlert('Please enter a search term');
         }
@@ -200,8 +209,13 @@ async function searchMain() {
     }
 }
 
+// Display search results
+function displaysSearchResults(results) {
+    
+}
+
 // Custom show alert
-function showAlert(message, className) {
+function showAlert(message, className = 'alert-error') {
     const alertEl = document.createElement('div');
     alertEl.classList.add('alert', className);
     alertEl.appendChild(document.createTextNode(message));
