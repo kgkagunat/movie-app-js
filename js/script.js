@@ -7,6 +7,10 @@ const globalWindow = {
         page: 1,
         totalPages: 1,
     },
+    api: {
+        apiKey: 'bcc56ec49f59a3055407bcfa8f1a49f1',
+        apiURL: 'https://api.themoviedb.org/3/',
+    },
 };
 // console.log(globalWindow.currentPage);
 // console.log(globalWindow.search)
@@ -15,8 +19,8 @@ const globalWindow = {
 async function fetchAPIData(endpoint) {
     try {
         // API Key and URL
-        const API_KEY = 'bcc56ec49f59a3055407bcfa8f1a49f1';
-        const API_URL = `https://api.themoviedb.org/3/`;
+        const API_KEY = globalWindow.api.apiKey;
+        const API_URL = globalWindow.api.apiURL;
 
         showSpinner();
 
