@@ -382,7 +382,7 @@ function buildTVShowDetailsElements(show) {
             <h2>${show.name}</h2>
             <p>
               <i class="fas fa-star text-primary"></i>
-              8 / 10
+              ${show.vote_average.toFixed(1)} / 10
             </p>
             <p class="text-muted">Release Date: ${show.first_air_date}</p>
             <p>
