@@ -126,6 +126,36 @@ function manageNavLinks() {
     });
 }
 
+// Display Slider-Swiper Movies
+async function displaySliderMovies() {
+    try {
+        const data = await fetchAPIData('movie/now_playing');
+        // console.log(data);
+
+        const movieResults = data.results;
+        // console.log(movieResults);
+        movieResults.forEach((movie) => {
+            const div = document.createElement('div');
+            div.classList.add('swiper-slide');
+
+            div.innerHTML = `
+            <a href="movie-details.html?id=${movie.id}">
+              <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+            </a>
+            <h4 class="swiper-rating">
+              <i class="fas fa-star text-secondary"></i> ${movie.vote_average} / 10
+            </h4>
+        `;
+
+            document.querySelector('.swiper-wrapper').appendChild(div);
+        });
+
+        initSwiper();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // Init
 function init() {
     switch (globalWindow.currentPage) {
@@ -135,6 +165,7 @@ function init() {
             console.log(
                 `Current Page: ${globalWindow.currentPage} (Home Page)`
             );
+            displaySliderMovies();
             displayPopularMovies();
             break;
         // TV Shows Page
@@ -446,6 +477,34 @@ function displayBackgroundImage(type, backdropPath) {
     } else {
         document.querySelector('#show-details').appendChild(backdropEl);
     }
+}
+
+// Init Swiper
+function initSwiper() {
+    const swiper = new Swiper('.swiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        freeMode: true,
+        loop: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        breakpoints: {
+            500: {
+                slidesPerView: 1,
+            },
+            700: {
+                slidesPerView: 2,
+            },
+            1000: {
+                slidesPerView: 3,
+            },
+            1200: {
+                slidesPerView: 4,
+            },
+        },
+    });
 }
 
 document.addEventListener('DOMContentLoaded', init);
