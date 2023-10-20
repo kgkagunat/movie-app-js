@@ -13,7 +13,7 @@ const globalWindow = {
     },
 };
 // console.log(globalWindow.currentPage);
-// console.log(globalWindow.search)
+// console.log(globalWindow.search);
 
 // Fetch all data from TMDB API
 async function fetchAPIData(endpoint) {
@@ -27,6 +27,30 @@ async function fetchAPIData(endpoint) {
         // API response from determined endpoint
         const response = await fetch(
             `${API_URL}${endpoint}?api_key=${API_KEY}&language=en-us`
+        );
+
+        // Returns JSON object
+        const data = await response.json();
+        // console.log(data);
+        hideSpinner();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Request search data from TMDB API
+async function searchAPIData() {
+    try {
+        // API Key and URL
+        const API_KEY = globalWindow.api.apiKey;
+        const API_URL = globalWindow.api.apiURL;
+
+        showSpinner();
+
+        // API response from determined endpoint
+        const response = await fetch(
+            `${API_URL}search/${globalWindow.search.type}?api_key=${API_KEY}&language=en-us&query=${globalWindow.search.term}`
         );
 
         // Returns JSON object
@@ -160,7 +184,7 @@ async function searchMain() {
 
         // Set url search term and type to globalWindow object properties
         globalWindow.search.type = urlSearchParams.get('type');
-        globalWindow.search.term = urlSearchParams.get('term');
+        globalWindow.search.term = urlSearchParams.get('search-term');
 
         if (
             globalWindow.search.term !== '' &&
