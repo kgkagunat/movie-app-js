@@ -209,7 +209,7 @@ async function searchMain() {
     }
 }
 
-// Display search results
+// TODO: Display search results
 function displaysSearchResults(results) {
     
 }
