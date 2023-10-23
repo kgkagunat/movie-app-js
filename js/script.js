@@ -6,6 +6,7 @@ const globalWindow = {
         type: '',
         page: 1,
         totalPages: 1,
+        totalResults: 0,
     },
     api: {
         // Api Key and URL are stored
@@ -51,7 +52,7 @@ async function searchAPIData() {
 
         // API response -- globalWindow.search.type value is either `movie or tv` -- globalWindow.search.term value is the `user text input`
         const response = await fetch(
-            `${API_URL}search/${globalWindow.search.type}?api_key=${API_KEY}&language=en-us&query=${globalWindow.search.term}`
+            `${API_URL}search/${globalWindow.search.type}?api_key=${API_KEY}&language=en-us&query=${globalWindow.search.term}&page=${globalWindow.search.page}`
         );
 
         // Returns JSON object
@@ -197,13 +198,17 @@ async function searchMain() {
             globalWindow.search.term !== null
         ) {
             // Destructure data object
-            // const { results, total_pages, page } = await searchAPIData();
+            // const { results, total_pages, page, total_results } = await searchAPIData();
             // console.log(results, total_pages, page);
 
             // Get data object
             const data = await searchAPIData();
-            // console.log(data);
-            // console.log(data.results);
+            console.log(data);
+
+            // Set values to globalWindow object properties
+            globalWindow.search.page = data.page;
+            globalWindow.search.totalPages = data.total_pages;
+            globalWindow.search.totalResults = data.total_results;
 
             if (data.results.length === 0) {
                 showAlert('No results found');
@@ -225,6 +230,11 @@ async function searchMain() {
 
 // Display search results -- movie or tv show
 function displaysSearchResults(results) {
+    // Clear previous search results
+    document.querySelector('#search-results').innerHTML = '';
+    document.querySelector('#search-results-heading').innerHTML = '';
+    document.querySelector('#pagination').innerHTML = '';
+
     // Display movie/tv show based on type
     results.forEach((result) => {
         const div = document.createElement('div');
@@ -269,7 +279,49 @@ function displaysSearchResults(results) {
           </div>
         `;
 
+        // Display search results heading
+        document.querySelector('#search-results-heading').innerHTML = `
+        <h2>${results.length} of ${globalWindow.search.totalResults} -- Results for: ${globalWindow.search.term}</h2>
+        `;
+
         document.querySelector('#search-results').appendChild(div);
+    });
+
+    // Display pagination
+    displayPagination();
+}
+
+// Create and display pagination for search results
+function displayPagination() {
+    const div = document.createElement('div');
+    div.classList.add('pagination');
+    div.innerHTML = `
+    <button class="btn btn-primary" id="prev">Prev</button>
+          <button class="btn btn-primary" id="next">Next</button>
+          <div class="page-counter">${globalWindow.search.page} of ${globalWindow.search.totalPages}</div>
+    `;
+
+    document.querySelector('#pagination').appendChild(div);
+
+    // Disable `prev` button if page is 1 - and disable `next` button if page is last page
+    if (globalWindow.search.page === 1) {
+        document.querySelector('#prev').disabled = true;
+    } else if (globalWindow.search.page === globalWindow.search.totalPages) {
+        document.querySelector('#next').disabled = true;
+    }
+
+    // Goes to next page
+    document.querySelector('#next').addEventListener('click', async () => {
+        globalWindow.search.page++;
+        const data = await searchAPIData();
+        displaysSearchResults(data.results);
+    });
+
+    // Goes to previous page
+    document.querySelector('#prev').addEventListener('click', async () => {
+        globalWindow.search.page--;
+        const data = await searchAPIData();
+        displaysSearchResults(data.results);
     });
 }
 
