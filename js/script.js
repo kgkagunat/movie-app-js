@@ -48,7 +48,7 @@ async function searchAPIData() {
 
         showSpinner();
 
-        // API response from determined endpoint
+        // API response -- globalWindow.search.type value is either `movie or tv` -- globalWindow.search.term value is the `user text input`
         const response = await fetch(
             `${API_URL}search/${globalWindow.search.type}?api_key=${API_KEY}&language=en-us&query=${globalWindow.search.term}`
         );
@@ -174,32 +174,43 @@ async function displaySliderMovies() {
 // Search movies & tv shows
 async function searchMain() {
     try {
-        // Get query string from URL
+        // Get query string from URL -- I defined the query string as `type` and `search-term` -- view the search html parts
         const searchQueryString = window.location.search;
         // console.log(searchQueryString);
 
-        // Get query string methods -- get the query string `type` and its value
+        // Get query string methods -- get the query string and its value
         const urlSearchParams = new URLSearchParams(searchQueryString);
         // console.log(urlSearchParams.get('type'));
+        // console.log(urlSearchParams.get('search-term'));
 
-        // Set url search term and type to globalWindow object properties
+        // Set value of `search-term` and `type` to the globalWindow object properties
         globalWindow.search.type = urlSearchParams.get('type');
         globalWindow.search.term = urlSearchParams.get('search-term');
+        console.log(
+            'Type: ' + globalWindow.search.type + ' -----',
+            'Term: ' + globalWindow.search.term
+        );
 
         if (
             globalWindow.search.term !== '' &&
             globalWindow.search.term !== null
         ) {
-            const { results, total_pages, page } = await searchAPIData();
+            // Destructure data object
+            // const { results, total_pages, page } = await searchAPIData();
             // console.log(results, total_pages, page);
 
-            if (results.length === 0) {
+            // Get data object
+            const data = await searchAPIData();
+            // console.log(data);
+            // console.log(data.results);
+
+            if (data.results.length === 0) {
                 showAlert('No results found');
                 return;
             }
 
             // Display search results
-            displaysSearchResults(results);
+            displaysSearchResults(data.results);
 
             // Clear search term input
             document.querySelector('#search-term').value = '';
