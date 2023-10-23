@@ -198,8 +198,10 @@ async function searchMain() {
                 return;
             }
 
+            // Display search results
             displaysSearchResults(results);
 
+            // Clear search term input
             document.querySelector('#search-term').value = '';
         } else {
             showAlert('Please enter a search term');
@@ -209,9 +211,54 @@ async function searchMain() {
     }
 }
 
-// TODO: Display search results
+// Display search results -- movie or tv show
 function displaysSearchResults(results) {
-    
+    // Display movie/tv show based on type
+    results.forEach((result) => {
+        const div = document.createElement('div');
+        div.classList.add('card');
+        div.innerHTML = `
+        <a href="${globalWindow.search.type}-details.html?id=${result.id}">
+            ${
+                result.poster_path
+                    ? `<img
+                src="https://image.tmdb.org/t/p/w500${result.poster_path}"
+                class="card-img-top"
+                alt="${
+                    globalWindow.search.type === 'movie'
+                        ? result.title
+                        : result.name
+                }"
+                />`
+                    : `<img
+              src="images/no-image.jpg"
+              class="card-img-top"
+              alt="${
+                  globalWindow.search.type === 'movie'
+                      ? result.title
+                      : result.name
+              }"
+            />`
+            }
+          </a>
+          <div class="card-body">
+            <h5 class="card-title">${
+                globalWindow.search.type === 'movie'
+                    ? result.title
+                    : result.name
+            }</h5>
+            <p class="card-text">
+              <small class="text-muted">Release: ${
+                  globalWindow.search.type === 'movie'
+                      ? result.release_date
+                      : result.first_air_date
+              }</small>
+            </p>
+          </div>
+        `;
+
+        document.querySelector('#search-results').appendChild(div);
+    });
 }
 
 // Custom show alert
