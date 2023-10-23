@@ -59,12 +59,15 @@
         <form action="/search.html" class="search-form">
           <!-- movies and shows radio box -->
           <div class="search-radio">
+            <!-- If uses selects `movie` radio button, `type` value will be `movie`  -->
             <input type="radio" id="movie" name="type" value="movie" checked />
             <label for="movies">Movies</label>
+            <!-- If user selects `tv` radio button, `type` value will be `tv` -->
             <input type="radio" id="tv" name="type" value="tv" />
             <label for="shows">TV Shows</label>
           </div>
           <div class="search-flex">
+            <!-- User types in any movie/tv show, search-term value will be from user input text -->
             <input
               type="text"
               name="search-term"
