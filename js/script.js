@@ -215,7 +215,7 @@ function displaysSearchResults(results) {
 }
 
 // Custom show alert
-function showAlert(message, className = 'alert-error') {
+function showAlert(message, className = 'error') {
     const alertEl = document.createElement('div');
     alertEl.classList.add('alert', className);
     alertEl.appendChild(document.createTextNode(message));
