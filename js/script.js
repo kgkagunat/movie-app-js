@@ -8,6 +8,7 @@ const globalWindow = {
         totalPages: 1,
     },
     api: {
+        // Api Key and URL are stored
         apiKey: 'bcc56ec49f59a3055407bcfa8f1a49f1',
         apiURL: 'https://api.themoviedb.org/3/',
     },
